@@ -1,0 +1,31 @@
+# =========================
+# PYTHON (Data Plane)
+# =========================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# =========================
+# RUST (Control Plane)
+# =========================
+# Cargo build directories
+**/target/
+**/*.rs.bk
+
+# =========================
+# OS / IDE / EDITOR
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
