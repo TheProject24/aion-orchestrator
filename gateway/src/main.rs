@@ -1,3 +1,5 @@
+// gateway/src/main.rs
+
 use aion::model_orchestrator_client::ModelOrchestratorClient;
 use aion::InferenceRequest;
 use tonic::transport::{Channel, Endpoint};
@@ -25,7 +27,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut i = 1;
 
     loop {
-        let max_retries = 3;
+        let max_retries = 4;
         let mut success = false;
 
         for attempt in 1..=max_retries {
@@ -36,12 +38,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             match client.predict(request).await {
                 Ok(response) => {
-                    println!("Request {}: Handled by -> {}", i, response.into_inner().worker_id);
+                    let inner = response.into_inner();
+                        println!(
+                            "Request {}: Handled by -> {} Prediction: {} (Confidence: {})",
+                            i,
+                            inner.worker_id,
+                            inner.prediction,
+                            inner.confidence
+                        );
+
                     success = true;
                     break;
                 }
                 Err(e) => {
-                    println!("Request {}: X WORKER FAILED! Error: {}", i, e.message());
+                    println!(
+                        "Request {}: [Attempt {}/{}] Load Balancer hit a DEAD node! Error {}", 
+                        i,
+                        attempt,
+                        max_retries, 
+                        e.message()
+                    );
                     if attempt < max_retries {
                         tokio::time::sleep(std::time::Duration::from_millis(300)).await;
                     }
