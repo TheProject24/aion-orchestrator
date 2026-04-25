@@ -13,10 +13,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Gateway: Setting up,load balancer...");
 
     let endpoints = vec![
-        Endpoint::from_static("http://127.0.0.1:50051"),
-        Endpoint::from_static("http://127.0.0.1:50052"),
-        Endpoint::from_static("http://127.0.0.1:50053"),
-        Endpoint::from_static("http://127.0.0.1:50054"),
+        Endpoint::from_static("http://worker-1:50051"),
+        Endpoint::from_static("http://worker-2:50052"),
+        Endpoint::from_static("http://worker-3:50053"),
+        Endpoint::from_static("http://worker-4:50054"),
     ];
 
     let channel = Channel::balance_list(endpoints.into_iter());
